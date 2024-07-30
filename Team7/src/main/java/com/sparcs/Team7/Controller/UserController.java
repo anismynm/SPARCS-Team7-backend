@@ -52,7 +52,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> loginUser(@RequestBody loginDTO loginDTO) {
+    public ResponseEntity<Map<String, String>> loginUser(@RequestParam loginDTO loginDTO) {
         Map<String, String> response = new HashMap<>();
 
         try {

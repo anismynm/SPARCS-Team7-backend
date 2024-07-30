@@ -24,10 +24,6 @@ public class ReactionPaper {
     @JoinColumn(name = "email", nullable = false)
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "book_id", nullable = false)
-    private Book book;
-
     @Column(name = "RP_text", nullable = false, columnDefinition = "LONGTEXT")
     private String rpText;
 
@@ -40,8 +36,9 @@ public class ReactionPaper {
     @Column(name = "RP_date", nullable = false)
     private LocalDateTime rpDate;
 
-    @Column(name = "book_name", nullable = false, length = 50)
-    private String bookName;
+    @ManyToOne
+    @JoinColumn(name = "book_title", nullable = false)
+    private Book book;
 
 }
 

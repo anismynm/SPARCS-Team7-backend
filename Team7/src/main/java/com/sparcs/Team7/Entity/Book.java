@@ -11,9 +11,8 @@ import lombok.Setter;
 public class Book {
 
     @Id
-    @Column(name = "book_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer bookId;
+    @Column(name = "book_title", nullable = false)
+    private String bookTitle;
 
     @Column(name = "book_synop", nullable = false, columnDefinition = "LONGTEXT")
     private String bookSynop;

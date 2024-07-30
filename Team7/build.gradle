@@ -34,6 +34,20 @@ dependencies {
 	implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.6.0'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	runtimeOnly 'com.mysql:mysql-connector-j'
+
+	// OpenAi
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+	implementation 'com.theokanning.openai-gpt3-java:client:0.10.0'
+	implementation 'com.theokanning.openai-gpt3-java:service:0.10.0'
+
+	implementation 'com.stripe:stripe-java:23.2.0'
+	implementation 'javax.xml.bind:jaxb-api:2.3.1'
+	implementation 'sh.platform:config:2.2.2'
+
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 }
 
 tasks.named('test') {

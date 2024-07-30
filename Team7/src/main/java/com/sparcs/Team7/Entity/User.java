@@ -23,5 +23,8 @@ public class User {
     @Column(name = "name", nullable = false, length = 50)
     private String name;
 
+    public boolean checkPassword(String password) {
+        return this.password.equals(password);
+    }
 }
 

@@ -1,6 +1,7 @@
 package com.sparcs.Team7.Service;
 
 import com.sparcs.Team7.DTO.rpinfoDTO;
+import com.sparcs.Team7.DTO.rpsaveDTO;
 import com.sparcs.Team7.Entity.ReactionPaper;
 import com.sparcs.Team7.Repository.ReactionPaperRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -8,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -34,14 +34,23 @@ public class ReactionPaperService {
     }
 
     public rpinfoDTO getRPinfo(int id) {
-        List<Object[]> result = reactionPaperRepository.findByRpId(id);
+        ReactionPaper result = reactionPaperRepository.findByRpId(id);
         if (result != null) {
-            String rpTitle = result.get(0)[0].toString();
-            LocalDateTime rpDate = (LocalDateTime) result.get(0)[1];
-            String rpText = (String) result.get(0)[2];
+            String rpTitle = result.getRpTitle();
+            LocalDateTime rpDate = result.getRpDate();
+            String rpText = result.getRpText();
             return new rpinfoDTO(rpTitle, rpDate, rpText);
         } else {
             return null; // 결과가 없을 경우 null 반환
         }
+    }
+
+    public void saveRP(rpsaveDTO rpsaveDTO) {
+        ReactionPaper rp = new ReactionPaper();
+        rp.setRpTitle(rpsaveDTO.getRpTitle());
+        rp.setEmail(rpsaveDTO.getEmail());
+        rp.setRpText(rpsaveDTO.getRpText());
+        rp.setBookTitle(rpsaveDTO.getBookTitle());
+        reactionPaperRepository.save(rp);
     }
 }

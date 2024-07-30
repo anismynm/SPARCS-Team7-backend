@@ -2,6 +2,7 @@ package com.sparcs.Team7.Service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.sparcs.Team7.Entity.Book;
 import com.sparcs.Team7.Repository.BookRepository;
@@ -38,7 +39,7 @@ public class NcpService {
 
     public Integer saveImageFromUrl(String imageUrl) throws IOException {
         URL url = new URL(imageUrl);
-        int image_key = reactionPaperRepository.RPcount();
+        int image_key = reactionPaperRepository.RPcount() + 1;
         try (InputStream inputStream = url.openStream()) {
             String fileName = "image_" + image_key + ".png";
             Path tempFile = Files.createTempFile(fileName, ".png");
@@ -53,5 +54,11 @@ public class NcpService {
 
             return image_key;
         }
+    }
+
+    public void deleteImageFromBucket(int image_id) {
+        String image_name = "image_" + image_id + ".png";
+        amazonS3Client.deleteObject(new DeleteObjectRequest(bucketName, image_name));
+        System.out.println("Deleted Successfully");
     }
 }

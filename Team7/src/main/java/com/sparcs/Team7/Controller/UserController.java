@@ -3,6 +3,8 @@ package com.sparcs.Team7.Controller;
 import com.sparcs.Team7.DTO.loginDTO;
 import com.sparcs.Team7.Entity.User;
 import com.sparcs.Team7.Service.UserService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,15 +14,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@Slf4j
+@RequiredArgsConstructor
 @RequestMapping("/books")
 public class UserController {
 
     private final UserService userService;
-
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
 
     @PostMapping("/register")
     public ResponseEntity<Map<String, String>> registerUser(@RequestBody User user) {

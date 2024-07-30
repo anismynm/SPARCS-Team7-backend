@@ -3,13 +3,14 @@ package com.sparcs.Team7.Controller;
 import com.sparcs.Team7.DTO.rpinfoDTO;
 import com.sparcs.Team7.Service.ReactionPaperService;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,15 +18,11 @@ import java.util.Map;
 
 @RestController
 @Slf4j
+@RequiredArgsConstructor
 @RequestMapping("/books/main")
 public class ReactionPaperController {
 
     private final ReactionPaperService reactionPaperService;
-
-    @Autowired
-    public ReactionPaperController(ReactionPaperService reactionPaperService) {
-        this.reactionPaperService = reactionPaperService;
-    }
 
     @Getter
     @Setter
@@ -54,14 +51,18 @@ public class ReactionPaperController {
     }
 
     @GetMapping("/info")
-    public Map<String, String> getRPinfo(@RequestParam String RP_id) {
+    public ResponseEntity<Map<String, String>> getRPinfo(@RequestParam("rp_id") String RP_id) {
         Map<String, String> response = new HashMap<>();
         int RPkey = Integer.parseInt(RP_id.substring(3));
-        System.out.println("RPkey: " + RPkey);
-        rpinfoDTO infoList = reactionPaperService.getRPinfo(RPkey);
-        response.put("RP_title", infoList.getTitle());
-        response.put("RP_date", infoList.getDate());
-        response.put("RP_text", infoList.getText());
-        return response;
+        try {
+            rpinfoDTO infoList = reactionPaperService.getRPinfo(RPkey);
+            response.put("RP_title", infoList.getTitle());
+            response.put("RP_date", infoList.getDate());
+            response.put("RP_text", infoList.getText());
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("Error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.sparcs.Team7.Entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -14,31 +15,26 @@ public class ReactionPaper {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "RP_id", nullable = false)
+    @Column(name = "rp_id", nullable = false)
     private Integer rpId;
 
-    @Column(name = "RP_title", nullable = false, length = 50)
+    @Column(name = "rp_title", nullable = false, length = 50)
     private String rpTitle;
 
-    @ManyToOne
-    @JoinColumn(name = "email", nullable = false)
-    private User user;
+    @Column(name = "email", nullable = false)
+    private String email;
 
-    @Column(name = "RP_text", nullable = false, columnDefinition = "LONGTEXT")
+    @Column(name = "rp_text", nullable = false, columnDefinition = "LONGTEXT")
     private String rpText;
 
-    @Column(name = "image_id", nullable = false, length = 50)
-    private String imageId;
+    @Column(name = "like_count", nullable = false, columnDefinition = "int default 0")
+    private Integer likeCount = 0;
 
-    @Column(name = "LikeCount", nullable = false)
-    private Integer likeCount;
-
-    @Column(name = "RP_date", nullable = false)
+    @Column(name = "rp_date", nullable = false)
+    @CreationTimestamp
     private LocalDateTime rpDate;
 
-    @ManyToOne
-    @JoinColumn(name = "book_title", nullable = false)
-    private Book book;
-
+    @Column(name = "book_title", nullable = false)
+    private String bookTitle;
 }
 

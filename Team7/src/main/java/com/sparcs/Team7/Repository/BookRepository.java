@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface BookRepository extends JpaRepository<Book, String> {
     @Query(value = "select book_prompt from book where book_title = :name", nativeQuery = true)
-    public String getPrompt(@Param("name") String book_title);
+    String getPrompt(@Param("name") String book_title);
 
     @Query(value = "select book_title from book", nativeQuery = true)
-    public List<String> find();
+    List<String> find();
 }

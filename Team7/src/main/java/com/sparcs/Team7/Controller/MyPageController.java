@@ -1,9 +1,14 @@
 package com.sparcs.Team7.Controller;
 
+import com.sparcs.Team7.DTO.myAllDTO;
+import com.sparcs.Team7.DTO.myLikedDTO;
+import com.sparcs.Team7.DTO.myRPDTO;
 import com.sparcs.Team7.Service.MyPageService;
 import com.sparcs.Team7.Service.NcpService;
 import jakarta.persistence.Tuple;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @Slf4j
@@ -22,49 +28,39 @@ public class MyPageController {
     private final MyPageService myPageService;
     private final NcpService ncpService;
 
-    private boolean MappingId(Map<String, String> response, List<String> rpList) {
-        if (rpList.isEmpty()) {
-            response.put("rp_id", "Empty");
-            return false;
-        }
-        int i = 0;
-        for (String rp : rpList) {
-            response.put("rp_id" + i, rp);
-            i++;
-        }
-        return true;
-    }
 
     @GetMapping()
-    public ResponseEntity<Map<String, String>> myRP(@RequestParam("email") String email) {
-        Map<String, String> response = new HashMap<>();
+    public myRPDTO myRP(@RequestParam("email") String email) {
+        myRPDTO response = new myRPDTO();
         List<String> rpList = myPageService.getMyRP(email);
-        if (MappingId(response, rpList)) return ResponseEntity.ok(response);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        response.setMyRP(rpList);
+        response.setCount(String.valueOf(rpList.size()));
+
+        return response;
     }
 
     @GetMapping("/like")
-    public ResponseEntity<Map<String, String>> myLikedRP(@RequestParam("email") String email) {
-        Map<String, String> response = new HashMap<>();
+    public myLikedDTO myLikedRP(@RequestParam("email") String email) {
+        myLikedDTO response = new myLikedDTO();
         List<String> rpList = myPageService.getMyLikedRP(email);
-        if (MappingId(response, rpList)) return ResponseEntity.ok(response);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        response.setMyLikedRP(rpList);
+        response.setCount(String.valueOf(rpList.size()));
+
+        return response;
     }
 
     @GetMapping("/all")
-    public ResponseEntity<Map<String, Object>> myAllRP(@RequestParam("email") String email) {
-        Map<String, Object> response = new HashMap<>();
-        Map<String, String> rpMap = new HashMap<>();
-        Map<String, String> likedRpMap = new HashMap<>();
+    public myAllDTO myAllRP(@RequestParam("email") String email) {
+        myAllDTO response = new myAllDTO();
+        List<String> myLikedList = myPageService.getMyLikedRP(email);
+        List<String> myList = myPageService.getMyRP(email);
+        response.setMyLikedRP(myLikedList);
+        response.setMyRP(myList);
+        response.setName(myPageService.getMyName(email));
+        response.setMyLikedCount(String.valueOf(myLikedList.size()));
+        response.setMyCount(String.valueOf(myList.size()));
 
-        List<String> rpList = myPageService.getMyRP(email);
-        List<String> likedRpList = myPageService.getMyLikedRP(email);
-        MappingId(rpMap, rpList);
-        MappingId(likedRpMap, likedRpList);
-        response.put("myRP", rpMap);
-        response.put("myLikedRP", likedRpMap);
-
-        return ResponseEntity.ok(response);
+        return response;
     }
 
     @PostMapping("/delete")

@@ -10,5 +10,5 @@ import java.util.List;
 
 public interface UserLikedReactionPaperRepository extends JpaRepository<UserLikedReactionPaper, UserLikedReactionPaperId> {
     @Query(value = "select rp_id from user_liked_reaction_paper where email = :email", nativeQuery = true)
-    public List<String> findByEmail(@Param("email") String email);
+    List<String> findByEmail(@Param("email") String email);
 }

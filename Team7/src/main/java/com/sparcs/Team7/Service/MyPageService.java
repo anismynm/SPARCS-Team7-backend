@@ -2,6 +2,7 @@ package com.sparcs.Team7.Service;
 
 import com.sparcs.Team7.Repository.ReactionPaperRepository;
 import com.sparcs.Team7.Repository.UserLikedReactionPaperRepository;
+import com.sparcs.Team7.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class MyPageService {
+    private final UserRepository userRepository;
     private final ReactionPaperRepository reactionPaperRepository;
     private final UserLikedReactionPaperRepository userLikedReactionPaperRepository;
 
@@ -25,5 +27,9 @@ public class MyPageService {
 
     public List<String> getMyLikedRP(String email) {
         return userLikedReactionPaperRepository.findByEmail(email);
+    }
+
+    public String getMyName(String email) {
+        return userRepository.findNameByEmail(email);
     }
 }

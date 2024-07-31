@@ -78,16 +78,15 @@ public class AiController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<Map<String, String>> saveRP(@RequestBody rpsaveDTO rpsavedto) {
+    public ResponseEntity<Map<String, String>> saveRP(@RequestBody rpsaveDTO rpsavedto) throws IOException {
         Map<String, String> response = new HashMap<>();
         int id = Integer.parseInt(rpsavedto.getRpId().substring(3));
         String encodedImgUrl = rpsavedto.getImgUrl();
-        System.out.println(encodedImgUrl);
-        byte[] decodedBytes = Base64.getDecoder().decode(encodedImgUrl.getBytes());
+        if (!encodedImgUrl.equals("ai")) {
+            byte[] decodedBytes = Base64.getDecoder().decode(encodedImgUrl.getBytes());
+            ncpService.saveMyImg(decodedBytes, id);
+        }
         try {
-            if (!encodedImgUrl.equals("ai")) {
-                ncpService.saveMyImg(decodedBytes, id);
-            }
             reactionPaperService.saveRP(rpsavedto);
             response.put("code", "SU");
             response.put("message", "successfully saved.");

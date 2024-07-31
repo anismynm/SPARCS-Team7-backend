@@ -51,6 +51,22 @@ public class MyPageController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<Map<String, Object>> myAllRP(@RequestParam("email") String email) {
+        Map<String, Object> response = new HashMap<>();
+        Map<String, String> rpMap = new HashMap<>();
+        Map<String, String> likedRpMap = new HashMap<>();
+
+        List<String> rpList = myPageService.getMyRP(email);
+        List<String> likedRpList = myPageService.getMyLikedRP(email);
+        MappingId(rpMap, rpList);
+        MappingId(likedRpMap, likedRpList);
+        response.put("myRP", rpMap);
+        response.put("myLikedRP", likedRpMap);
+
+        return ResponseEntity.ok(response);
+    }
+
     @PostMapping("/delete")
     public ResponseEntity<Map<String, String>> delete(@RequestParam("rp_id") String rp_id) {
         Map<String, String> response = new HashMap<>();

@@ -17,10 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @Slf4j
@@ -83,7 +80,14 @@ public class AiController {
     @PostMapping("/save")
     public ResponseEntity<Map<String, String>> saveRP(@RequestBody rpsaveDTO rpsavedto) {
         Map<String, String> response = new HashMap<>();
+        int id = Integer.parseInt(rpsavedto.getRpId().substring(3));
+        String encodedImgUrl = rpsavedto.getImgUrl();
+        System.out.println(encodedImgUrl);
+        byte[] decodedBytes = Base64.getDecoder().decode(encodedImgUrl.getBytes());
         try {
+            if (!encodedImgUrl.equals("ai")) {
+                ncpService.saveMyImg(decodedBytes, id);
+            }
             reactionPaperService.saveRP(rpsavedto);
             response.put("code", "SU");
             response.put("message", "successfully saved.");

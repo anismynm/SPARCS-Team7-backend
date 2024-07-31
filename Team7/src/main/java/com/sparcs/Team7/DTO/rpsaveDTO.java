@@ -13,4 +13,5 @@ public class rpsaveDTO {
     private String email;
     private String rpText;
     private String bookTitle;
+    private String imgUrl;
 }

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -52,6 +53,23 @@ public class NcpService {
 
             return image_key;
         }
+    }
+
+    public void saveMyImg(byte[] imageData, int id) throws IOException {
+        String fileName = "image_" + id + ".png";
+        Path tempFile = Files.createTempFile(fileName, ".png");
+        try (FileOutputStream fos = new FileOutputStream(tempFile.toFile())) {
+            fos.write(imageData);
+        } catch (IOException e) {
+            throw new IOException("Failed to write image data to file", e);
+        }
+
+        PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, fileName, tempFile.toFile());
+        amazonS3Client.putObject(putObjectRequest
+                .withCannedAcl(CannedAccessControlList.PublicRead));
+
+        log.info("image uploaded to DB");
+        Files.delete(tempFile);
     }
 
     public void deleteImageFromBucket(int image_id) {

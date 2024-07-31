@@ -1,7 +1,9 @@
 package com.sparcs.Team7.Controller;
 
+import com.sparcs.Team7.DTO.bookDTO;
 import com.sparcs.Team7.DTO.promptDTO;
 import com.sparcs.Team7.DTO.rpsaveDTO;
+import com.sparcs.Team7.Entity.Book;
 import com.sparcs.Team7.Entity.ReactionPaper;
 import com.sparcs.Team7.Service.AiService;
 import com.sparcs.Team7.Service.BookService;
@@ -15,7 +17,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -27,19 +31,37 @@ public class AiController {
     private final NcpService ncpService;
     private final BookService bookService;
     private final ReactionPaperService reactionPaperService;
-    private String temp_prompt;
-    private int temp_key;
+    private bookDTO tempbookDTO;
+    private int tempImageKey;
 
-    @GetMapping
-    public ResponseEntity<Map<String, String>> getImage(@RequestParam String final_prompt)
+    @GetMapping()
+    public ResponseEntity<Map<String, String>> getBooks() {
+        Map<String, String> response = new HashMap<String, String>();
+        List<String> bookNames = bookService.getBooks();
+        int i = 0;
+        for (String bookName : bookNames) {
+            response.put(String.valueOf(i), bookName);
+            i++;
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/send")
+    public ResponseEntity<Map<String, String>> getImage(@RequestBody bookDTO bookDTO)
             throws IOException, InterruptedException {
+        tempbookDTO = new bookDTO();
+        tempbookDTO.setBookTitle(bookDTO.getBookTitle());
+        tempbookDTO.setColor(bookDTO.getColor());
+
+        String book_prompt = bookService.getPrompt(bookDTO.getBookTitle());
+        String color = bookDTO.getColor();
+        String final_prompt = book_prompt + " 전체적 " + color + " 톤";
+
         System.out.println("final_prompt :" + final_prompt);
         String prompt = aiService.generatePictureV2(final_prompt);
         Integer image_key = ncpService.saveImageFromUrl(prompt);
-
-        // 재생성을 위한 prompt, key 값 저장
-        temp_prompt = final_prompt;
-        temp_key = image_key;
+        tempImageKey = image_key;
 
         log.info("Bucket uploaded Successfully.");
 
@@ -54,17 +76,8 @@ public class AiController {
 
     @GetMapping("/cancel")
     public void RegenerateImage() throws IOException, InterruptedException {
-        ncpService.deleteImageFromBucket(temp_key);
-        getImage(temp_prompt);
-    }
-
-    @GetMapping("/synop")
-    public ResponseEntity<Map<String, String>> getSynop(@RequestParam String book_title) {
-        Map<String, String> response = new HashMap<>();
-        response.put("code", "SU");
-        response.put("synop", bookService.getSynop(book_title));
-
-        return ResponseEntity.ok(response);
+        ncpService.deleteImageFromBucket(tempImageKey);
+        getImage(tempbookDTO);
     }
 
     @PostMapping("/save")

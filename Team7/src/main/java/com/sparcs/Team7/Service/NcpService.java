@@ -24,12 +24,10 @@ import java.util.Map;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class NcpService {
-    private final ReactionPaperRepository reactionPaperRepository;
 
-    public NcpService(ReactionPaperRepository reactionPaperRepository) {
-        this.reactionPaperRepository = reactionPaperRepository;
-    }
+    private final ReactionPaperRepository reactionPaperRepository;
 
     @Autowired
     private AmazonS3 amazonS3Client;

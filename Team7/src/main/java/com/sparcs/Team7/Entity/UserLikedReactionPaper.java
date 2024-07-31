@@ -18,6 +18,6 @@ public class UserLikedReactionPaper implements Serializable {
     private String email;
 
     @Id
-    @JoinColumn(name = "RP_id", nullable = false)
+    @JoinColumn(name = "rp_id", nullable = false)
     private Integer rpId;
 }

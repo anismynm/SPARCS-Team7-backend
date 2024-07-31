@@ -1,5 +1,6 @@
 package com.sparcs.Team7.Controller;
 
+import com.sparcs.Team7.DTO.likeDTO;
 import com.sparcs.Team7.DTO.rpinfoDTO;
 import com.sparcs.Team7.Service.ReactionPaperService;
 import lombok.Getter;
@@ -64,5 +65,28 @@ public class ReactionPaperController {
             response.put("Error", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
+    }
+
+    @PostMapping("/info/like")
+    public ResponseEntity<Map<String, String>> RPlike(@RequestBody likeDTO likeDTO) {
+        Map<String, String> response = new HashMap<>();
+
+        try {
+            reactionPaperService.likeRP(likeDTO);
+            response.put("code", "SU");
+            response.put("message", "liked Done.");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("code", "FA");
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @PostMapping("/info/like/cancel")
+    public ResponseEntity<Map<String, String>> RPlikeCancel(@RequestBody likeDTO likeDTO) {
+        Map<String, String> response = new HashMap<>();
+
+
     }
 }

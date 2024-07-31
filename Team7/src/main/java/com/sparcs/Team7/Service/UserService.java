@@ -3,6 +3,7 @@ package com.sparcs.Team7.Service;
 import com.sparcs.Team7.DTO.loginDTO;
 import com.sparcs.Team7.Entity.User;
 import com.sparcs.Team7.Repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -10,13 +11,10 @@ import java.util.Optional;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
-
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     public void save(User user) {
         userRepository.save(user);

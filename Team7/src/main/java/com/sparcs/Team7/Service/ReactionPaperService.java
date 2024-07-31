@@ -56,6 +56,8 @@ public class ReactionPaperService {
         rp.setEmail(rpsaveDTO.getEmail());
         rp.setRpText(rpsaveDTO.getRpText());
         rp.setBookTitle(rpsaveDTO.getBookTitle());
+        int rp_id = Integer.parseInt(rpsaveDTO.getRpId().substring(3));
+        rp.setRpId(rp_id);
         reactionPaperRepository.save(rp);
     }
 

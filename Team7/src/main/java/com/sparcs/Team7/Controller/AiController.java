@@ -38,7 +38,7 @@ public class AiController {
         Integer image_key = ncpService.saveImageFromUrl(prompt);
 
         // 재생성을 위한 prompt, key 값 저장
-        temp_prompt = prompt;
+        temp_prompt = final_prompt;
         temp_key = image_key;
 
         log.info("Bucket uploaded Successfully.");

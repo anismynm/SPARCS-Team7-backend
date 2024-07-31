@@ -19,8 +19,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Random;
 
 @Service
 @Slf4j
@@ -37,7 +36,8 @@ public class NcpService {
 
     public Integer saveImageFromUrl(String imageUrl) throws IOException {
         URL url = new URL(imageUrl);
-        int image_key = reactionPaperRepository.RPcount() + 1;
+        Random random = new Random();
+        int image_key = 1000 + random.nextInt(9000);
         try (InputStream inputStream = url.openStream()) {
             String fileName = "image_" + image_key + ".png";
             Path tempFile = Files.createTempFile(fileName, ".png");

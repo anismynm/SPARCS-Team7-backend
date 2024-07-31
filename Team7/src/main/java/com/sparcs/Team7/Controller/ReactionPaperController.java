@@ -25,34 +25,31 @@ public class ReactionPaperController {
 
     private final ReactionPaperService reactionPaperService;
 
-    @Getter
-    @Setter
-    public static class RPclass {
-        private String error;
-        private String message;
-        private String RP_id1;
-        private String RP_id2;
-        private String RP_id3;
-    }
-
     @GetMapping()
-    public RPclass MostLikedRP() {
-        RPclass rpclass = new RPclass();
+    public ResponseEntity<Map<String, String>> MostLikedRP() {
+        Map<String, String> response = new HashMap<>();
         try {
             List<String> MostLiked = reactionPaperService.MostLiked();
-            rpclass.RP_id1 = "image_" + MostLiked.get(0);
-            rpclass.RP_id2 = "image_" + MostLiked.get(1);
-            rpclass.RP_id3 = "image_" + MostLiked.get(2);
-        } catch (Exception e) {
-            rpclass.setError("Error");
-            rpclass.setMessage(e.getMessage());
-        }
+            response.put("code", "null");
+            response.put("message", "null");
+            response.put("rp_id1", "image_" + MostLiked.get(0));
+            response.put("rp_id2", "image_" + MostLiked.get(1));
+            response.put("rp_id3", "image_" + MostLiked.get(2));
 
-        return rpclass;
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("code", "Error");
+            response.put("message", e.getMessage());
+            response.put("rp_id1", "null");
+            response.put("rp_id2", "null");
+            response.put("rp_id3", "null");
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
     @GetMapping("/info")
-    public ResponseEntity<Map<String, String>> getRPinfo(@RequestParam("rp_id") String RP_id) {
+    public ResponseEntity<Map<String, String>> getRPinfo(@RequestParam String RP_id) {
         Map<String, String> response = new HashMap<>();
         int RPkey = Integer.parseInt(RP_id.substring(3));
         try {

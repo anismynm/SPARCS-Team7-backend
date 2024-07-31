@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 public class ReactionPaper {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "rp_id", nullable = false)
     private Integer rpId;
 

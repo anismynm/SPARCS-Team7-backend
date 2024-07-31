@@ -6,6 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class rpsaveDTO {
+    private String rpId;
     private String rpTitle;
     private String email;
     private String rpText;

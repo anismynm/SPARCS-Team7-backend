@@ -37,7 +37,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/register/email")
+    @PostMapping("/register/email")
     public Map<String, String> registerUserEmail(@RequestParam String email) {
         Map<String, String> response = new HashMap<>();
         if (userService.isEmail(email)) {
@@ -51,7 +51,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> loginUser(@RequestParam loginDTO loginDTO) {
+    public ResponseEntity<Map<String, String>> loginUser(@RequestBody loginDTO loginDTO) {
         Map<String, String> response = new HashMap<>();
 
         try {

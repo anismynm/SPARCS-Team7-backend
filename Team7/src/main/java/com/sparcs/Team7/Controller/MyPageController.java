@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 @RestController
 @Slf4j
@@ -23,23 +22,34 @@ public class MyPageController {
     private final MyPageService myPageService;
     private final NcpService ncpService;
 
-    @GetMapping()
-    public ResponseEntity<Map<String, String>> myRP(@RequestParam("email") String email) {
-        Map<String, String> response = new HashMap<>();
-        List<String> rpList = myPageService.getMyRP(email);
+    private boolean MappingId(Map<String, String> response, List<String> rpList) {
         if (rpList.isEmpty()) {
             response.put("rp_id", "Empty");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            return false;
         }
         int i = 0;
         for (String rp : rpList) {
             response.put("rp_id" + i, rp);
             i++;
         }
-        return ResponseEntity.ok(response);
+        return true;
+    }
+
+    @GetMapping()
+    public ResponseEntity<Map<String, String>> myRP(@RequestParam("email") String email) {
+        Map<String, String> response = new HashMap<>();
+        List<String> rpList = myPageService.getMyRP(email);
+        if (MappingId(response, rpList)) return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
     @GetMapping("/like")
+    public ResponseEntity<Map<String, String>> myLikedRP(@RequestParam("email") String email) {
+        Map<String, String> response = new HashMap<>();
+        List<String> rpList = myPageService.getMyLikedRP(email);
+        if (MappingId(response, rpList)) return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
 
     @PostMapping("/delete")
     public ResponseEntity<Map<String, String>> delete(@RequestParam("rp_id") String rp_id) {

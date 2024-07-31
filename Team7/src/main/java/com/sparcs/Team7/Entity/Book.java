@@ -17,5 +17,8 @@ public class Book {
     @Column(name = "book_synop", nullable = false, columnDefinition = "LONGTEXT")
     private String bookSynop;
 
+    @Column(name = "book_prompt")
+    private String bookPrompt;
+
 }
 

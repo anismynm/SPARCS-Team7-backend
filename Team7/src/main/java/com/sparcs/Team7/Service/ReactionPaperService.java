@@ -5,8 +5,10 @@ import com.sparcs.Team7.DTO.rpinfoDTO;
 import com.sparcs.Team7.DTO.rpsaveDTO;
 import com.sparcs.Team7.Entity.ReactionPaper;
 import com.sparcs.Team7.Entity.UserLikedReactionPaper;
+import com.sparcs.Team7.Entity.UserLikedReactionPaperId;
 import com.sparcs.Team7.Repository.ReactionPaperRepository;
 import com.sparcs.Team7.Repository.UserLikedReactionPaperRepository;
+import com.sparcs.Team7.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ import java.util.List;
 public class ReactionPaperService {
     private final ReactionPaperRepository reactionPaperRepository;
     private final UserLikedReactionPaperRepository userLikedReactionPaperRepository;
+    private final UserRepository userRepository;
 
     public static class NoDataFoundException extends RuntimeException {
         public NoDataFoundException(String message) {
@@ -59,11 +62,20 @@ public class ReactionPaperService {
     public void likeRP(likeDTO likeDTO) {
         UserLikedReactionPaper userLikedReactionPaper = new UserLikedReactionPaper();
         int rp_id = Integer.parseInt(likeDTO.getRp_id().substring(3));
-        System.out.println("rp_id parsed in service :" + rp_id);
         userLikedReactionPaper.setEmail(likeDTO.getEmail());
         userLikedReactionPaper.setRpId(rp_id);
 
         userLikedReactionPaperRepository.save(userLikedReactionPaper);
         reactionPaperRepository.like(rp_id);
+    }
+
+    public void likeRPcancel(likeDTO likeDTO) {
+        UserLikedReactionPaperId userLikedReactionPaperId = new UserLikedReactionPaperId();
+        int rp_id = Integer.parseInt(likeDTO.getRp_id().substring(3));
+        userLikedReactionPaperId.setEmail(likeDTO.getEmail());
+        userLikedReactionPaperId.setRpId(rp_id);
+
+        userLikedReactionPaperRepository.deleteById(userLikedReactionPaperId);
+        reactionPaperRepository.likeCancel(rp_id);
     }
 }

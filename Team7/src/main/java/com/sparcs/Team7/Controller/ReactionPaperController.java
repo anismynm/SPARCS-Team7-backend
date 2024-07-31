@@ -87,6 +87,15 @@ public class ReactionPaperController {
     public ResponseEntity<Map<String, String>> RPlikeCancel(@RequestBody likeDTO likeDTO) {
         Map<String, String> response = new HashMap<>();
 
-
+        try {
+            reactionPaperService.likeRPcancel(likeDTO);
+            response.put("code", "SU");
+            response.put("message", "liked Cancel Done.");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("code", "FA");
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 }

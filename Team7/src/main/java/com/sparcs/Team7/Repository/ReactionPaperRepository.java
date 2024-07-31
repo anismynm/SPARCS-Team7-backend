@@ -28,4 +28,9 @@ public interface ReactionPaperRepository extends JpaRepository<ReactionPaper, In
     @Modifying
     @Transactional
     public void like(@Param("id") int rp_id);
+
+    @Query(value = "update reaction_paper set like_count = like_count - 1 where rp_id = :id", nativeQuery = true)
+    @Modifying
+    @Transactional
+    public void likeCancel(@Param("id") int rp_id);
 }
